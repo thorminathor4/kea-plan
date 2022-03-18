@@ -33,46 +33,10 @@ function loadStudentSet(){
 		for(let i = 0; i < 29; i++)
 			scheduleMatrix.push([]);
 
-		for(let i in studentSet.lessons){
-			let lesson = studentSet.lessons[i];
-			let timespan = lesson.timespan;
-			let startTimeslot = getTimeslot(timespan[0], timespan[1]);
-			let endTimeslot = getTimeslot(timespan[2], timespan[3]);
-			let timeslotLength = endTimeslot - startTimeslot;
+		for(let i in studentSet.lessons)
+			addLessonToSchedule(scheduleMatrix, studentSet.lessons[i], lastBreaks);
 
-			console.log("loaded timespan");
-			if(startTimeslot > 0)
-				scheduleMatrix[lastBreaks[lesson.day]].pop();
-			
-			if(startTimeslot > lastBreaks[lesson.day]){
-				let breakHtml = breakToHtml(lesson.day, startTimeslot - lastBreaks[lesson.day]);
-				scheduleMatrix[lastBreaks[lesson.day]].push(breakHtml);
-			}
-			
-			let lessonHtml = lessonToHtml(lesson, timeslotLength);
-			scheduleMatrix[startTimeslot].push(lessonHtml);
-
-			if(endTimeslot < 28){
-				let breakHtml = breakToHtml(lesson.day, 29 - endTimeslot);
-				scheduleMatrix[endTimeslot].push(breakHtml);
-				lastBreaks[lesson.day] = endTimeslot;
-			}
-			//addLessonToSchedule(scheduleMatrix, studentSet.lessons[i], lastBreaks);
-		}
-
-		console.log(scheduleMatrix);
-		
-		for(let row in scheduleMatrix){
-			let timeslotElements = scheduleMatrix[row];
-			let timeslot = document.getElementById('timeslot' + row);
-			for(let col in timeslotElements){
-				timeslot.innerHTML += timeslotElements[col];
-				if(timeslot.lastChild.rowSpan < 3)
-					timeslot.lastChild.style.padding = "0 10px";
-			}
-		}
-
-		//addLessonsToTable(scheduleMatrix);
+		addLessonsToTable(scheduleMatrix);
 
 	}).catch(error => {
 		console.error(error);
