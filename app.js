@@ -4,4 +4,4 @@ app.use(express.static("public"));
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/public/KEA-Plan.html");
 });
-app.listen(3456);
+app.listen(process.env.PORT || 3456);
